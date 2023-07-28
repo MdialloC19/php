@@ -1,14 +1,25 @@
 <?php
 
-require_once('./Class/Paypal/Payment.php');
-require_once('./Class/Stripe/Payment.php');
-require_once('./Class/Users/User.php');
+require_once('./Class/Personnages/Personnage.php');
+require_once('./Class/Personnages/PersonnagesManager.php');
 
-use \Class\Paypal\Payment as PaypalPayment;
-use \Class\Stripe\Payment as StripePayment;
+$perso = new Personnage([
+    'nom' =>'Modou',
+    'forcePerso' => 5,
+    'degats' => 0,
+    'niveau' => 1,
+    'experience' => 0
+    ]);
+    try {
+        $db = new PDO('mysql:host=localhost;dbname=open', 'root', 'MdialloC19@');
+        $manager = new PersonnagesManager($db);
+       
+        $manager->add($perso);
 
-$_paymentPaypal=new PaypalPayment();
-
-$_paymentStripe=new StripePayment();
-
-var_dump($_paymentStripe, $_paymentPaypal);
+        
+    
+    } catch (PDOException $e) {
+        echo "Erreur lors de l'insertion : " . $e->getMessage();
+        echo "Informations d'erreur : " . print_r($q->errorInfo(), true);
+    }
+    
