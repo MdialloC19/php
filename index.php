@@ -1,8 +1,4 @@
 <?php
-// require_once('./Class/Personnages/Personnage.php');
-// require_once('./Class/Personnages/PersonnagesManager.php');
-
-
 
     function chargerClasse($classe){
 
@@ -12,23 +8,34 @@
     spl_autoload_register('chargerClasse');
 
     session_start();
-    // var_dump($_GET['frapper']);
-// $perso = new Personnage([
-//     'nom' =>'Modou',
-//     'forcePerso' => 100,
-//     'degats' => 0,
-//     'niveau' => 1,
-//     'experience' => 0
-//     ]);
+   
     if (isset($_GET['deconnexion']))
         {
+            $_SESSION['dateconnec'] = date('Y-m-d H:i:s');
+           
             session_destroy();
             header('Location: .');
             exit();
         }
-    if (isset($_SESSION['perso'])) // Si la session perso existe, on restaure l'objet.
+        // Si la session perso existe, on restaure l'objet.
+    if (isset($_SESSION['perso'])) 
         {
+            // var_dump($_SESSION['dateconnec']);
             $perso = $_SESSION['perso'];
+            if(isset($_SESSION['dateconnec'])){
+                $lastConnection = new DateTime($_SESSION['dateconnec']);
+                $now = new DateTime();
+                $diff = $now->diff($lastConnection);
+
+                if ($diff->days >= 1) {
+
+                    $currentDegats = $perso->degats();
+                    $newDegats = max(0, $currentDegats - 5); 
+                    $perso->setDegats($newDegats);
+        
+                    $_SESSION['dateconnec'] = $now->format('Y-m-d H:i:s');
+                }  
+            }
         }
 
 
@@ -47,7 +54,7 @@
 
         $perso=new Personnage([
             'nom' =>$_POST['nom'],
-            'forcePerso' => 100,
+            'forcePerso' =>10,
             'degats' => 0,
             'niveau' => 1,
             'experience' => 0
@@ -99,6 +106,9 @@
                         $manager->update($perso);
                         $manager->delete($persoAFrapper);
                         break;
+                    case Personnage::PERSONNAGE_LIMIT_COUP:
+                        $message="Limite de coups atteinte pour aujourd'hui !";
+                        break;
                 }
             }
         }
@@ -110,7 +120,7 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>CSS Positioning</title>
+      <title>Game Test</title>
       <style>
        
       </style>
@@ -129,7 +139,12 @@
             <legend>Mes informations</legend>
             <p>
             Nom : <?php echo htmlspecialchars($perso->nom()); ?><br />
-            Dégâts : <?php echo $perso->degats(); ?>
+            Force : <?php echo $perso->forcePerso(); ?><br />
+            Dégâts : <?php echo $perso->degats(); ?><br />
+            Experience :<?php echo $perso->experience();?> <br/>
+            Niveau :<?php echo $perso->niveau();?><br/>
+            NombreCoup :<?php echo $perso->nombreCoup();?><br/>
+            Date Dernier Connexion :<?php echo $_SESSION['dateconnec'];?>
             </p>
         </fieldset>
         <fieldset>

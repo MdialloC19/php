@@ -8,10 +8,13 @@ Class Personnage{
     private $_degats;
     private $_niveau;
     private $_experience;
+    private $_nombreCoup;
+    private $_dateCoup;
 
     const CEST_MOI = 1;
     const PERSONNAGE_TUE = 2;
     const PERSONNAGE_FRAPPE = 3;
+    const PERSONNAGE_LIMIT_COUP=4;
 
     public function __construct(array $perso) {
 
@@ -38,6 +41,8 @@ Class Personnage{
     public function degats() { return $this->_degats; }
     public function niveau() { return $this->_niveau; }
     public function experience() { return $this->_experience; }
+    public function nombreCoup() { return $this->_nombreCoup; }
+    public function dateCoup() { return $this->_dateCoup; }
 
 
     public function setId($id){
@@ -76,7 +81,6 @@ Class Personnage{
 
     public function setNiveau($niveau){
             $niveau = (int) $niveau;
-        
         if ($niveau < 0){
             trigger_error('Le Niveau ne doit pas étre négatif', E_USER_WARNING);
             return ;
@@ -99,25 +103,53 @@ Class Personnage{
         $this->_experience=$exp;
     }
 
+    public function setNombreCoup($nombreCoup){
+        $this->_nombreCoup = (int) $nombreCoup;
+    }
+
+    public function setDateCoup($dateCoup){
+        $this->_dateCoup = $dateCoup;
+    }
     public function nomValide(){
 
         return !empty($this->_nom);
 
     }
     public function frapper(Personnage $perso){
-        var_dump($perso->id() == $this->_id);
+
+        $today = date('Y-m-d');
+        if ($this->_dateCoup === $today && $this->_nombreCoup >= 3) {
+            return self::PERSONNAGE_LIMIT_COUP;
+        }
+        $this->_nombreCoup++;
+        $this->_dateCoup = $today;
+        
         if($perso->id() == $this->_id)
             return self::CEST_MOI;
-        return $perso->recevoirDegats();
+
+        $exp=$this->experience()+10;
+        $this->setExperience($exp);
+
+        if ($this->_experience >= 100) {
+            $this->_niveau++;
+            $this->_forcePerso+=10;
+            $this->_experience = 0; 
+        }
+
+        return $perso->recevoirDegats($this->forcePerso());
     }
 
-    public function recevoirDegats(){
+    public function recevoirDegats(int $force){
         
-        $this->_degats+=5;
+        if($force<25)
+            $this->_degats+=5;
+        elseif(($force>25)&&($force<50))
+            $this->_degats+=10;
+        else
+            $this->_degats+=25;
 
         if($this->_degats>100)
             return self::PERSONNAGE_TUE;   
         return self::PERSONNAGE_FRAPPE;
-
     }
 }
