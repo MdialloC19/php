@@ -9,6 +9,10 @@ Class Personnage{
     private $_niveau;
     private $_experience;
 
+    const CEST_MOI = 1;
+    const PERSONNAGE_TUE = 2;
+    const PERSONNAGE_FRAPPE = 3;
+
     public function __construct(array $perso) {
 
         $this->hydrate($perso);
@@ -93,5 +97,28 @@ Class Personnage{
             return;
         }
         $this->_experience=$exp;
+    }
+
+    public function nomValide(){
+
+        return !empty($this->_nom);
+
+    }
+    public function frapper(Personnage $perso){
+        
+        if($this==$perso)
+            return self::CEST_MOI;
+        return $perso->recevoirDegats();
+    }
+
+    public function recevoirDegats(){
+        
+        $this->_degats+=5;
+
+        if($this->_degats>100)
+            return self::PERSONNAGE_TUE;
+            
+        return self::PERSONNAGE_FRAPPE;
+
     }
 }

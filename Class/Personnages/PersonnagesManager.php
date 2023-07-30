@@ -29,20 +29,53 @@ Class PersonnagesManager{
 
         $q->execute();
         echo '<script>alert(\'ajouter avec succes\'</script>';
-
-
     }
+
+    public function count(){
+
+        return  $q=$this->_db->query('SELECT COUNT(*) from personnages')->fetchColumn();
+    }
+
+    public function exist($info){
+
+        if(is_int($info)){
+
+            return (bool) $this->_db->query('SELECT COUNT(*) from personnages where id='.$info);
+        }
+
+        $q = $this->_db->prepare('SELECT COUNT(*) FROM personnages WHERE nom = :nom');
+        $q->execute(array(':nom' => $info));
+
+        return (bool) $q->fetchColumn();
+    }
+   
 
     public function delete(Personnage $perso){
         $this->_db->exec('DELETE FROM personnages where id='.$perso->id());
     }
-    public function get($id){
 
-        $id = (int) $id;
-        $q = $this->_db->query('SELECT id, nom, forcePerso, degats,
-        niveau, experience FROM personnages WHERE id = '.$id);
-        $donnees = $q->fetch(PDO::FETCH_ASSOC);
-        return new Personnage($donnees);
+    public function get($info){
+
+        if(is_int($info)){
+
+            $q = $this->_db->query('SELECT id, nom, forcePerso, degats,
+            niveau, experience FROM personnages WHERE id = '.$info);
+
+            $donnees = $q->fetch(PDO::FETCH_ASSOC);
+            return new Personnage($donnees);
+
+        }else{
+
+            $q = $this->_db->prepare('SELECT id, nom, forcePerso, degats,
+            niveau, experience FROM personnages WHERE nom = :nom');
+            $q->bindValue(':nom',$info);
+            $q->execute();
+            $donnees = $q->fetch(PDO::FETCH_ASSOC);
+            return new Personnage($donnees);
+            
+        }
+
+        
     }
 
     public function getList(){
@@ -55,7 +88,7 @@ Class PersonnagesManager{
             $perso []=new Personnage($donnees);
         }
 
-        return $perso ;
+        return $perso;
     }
 
     public function update(Personnage $perso){
