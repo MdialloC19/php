@@ -20,7 +20,7 @@
         // Si la session perso existe, on restaure l'objet.
     if (isset($_SESSION['perso'])) 
         {
-            // var_dump($_SESSION['dateconnec']);
+            
             $perso = $_SESSION['perso'];
             if(isset($_SESSION['dateconnec'])){
                 $lastConnection = new DateTime($_SESSION['dateconnec']);
