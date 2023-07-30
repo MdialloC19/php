@@ -19,8 +19,9 @@ Class PersonnagesManager{
     public function add(Personnage $perso){
 
         // var_dump($perso);
-        $q=$this->_db->prepare('INSERT INTO personnages SET nom =:nom, 
+        $q=$this->_db->prepare('INSERT INTO personnages SET  nom =:nom, 
         forcePerso = :forcePerso, degats = :degats, niveau = :niveau, experience = :experience');
+        // $q->bindValue(':id',$perso->id());
         $q->bindValue(':nom',$perso->nom());
         $q->bindValue(':forcePerso', $perso->forcePerso(),PDO::PARAM_INT);
         $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
@@ -28,7 +29,9 @@ Class PersonnagesManager{
         $q->bindValue(':experience', $perso->experience(),PDO::PARAM_INT);
 
         $q->execute();
-        echo '<script>alert(\'ajouter avec succes\'</script>';
+        
+        $perso->setId($this->_db->lastInsertId());
+      
     }
 
     public function count(){
@@ -92,20 +95,20 @@ Class PersonnagesManager{
     }
 
     public function update(Personnage $perso){
-
-        $q=$this->_db->prepare('UPDATE personnages SET nom =:nom, 
-        forcePerso = :forcePerso, degats = :degats, niveau = :niveau, experience = :experience');
+        $q = $this->_db->prepare('UPDATE personnages SET nom = :nom, 
+            forcePerso = :forcePerso, degats = :degats, niveau = :niveau, experience = :experience
+            WHERE id = :id');
 
         $q->bindValue(':nom', $perso->nom());
-        $q->bindValue(':forcePerso', $perso->forcePerso(),PDO::PARAM_INT);
+        $q->bindValue(':forcePerso', $perso->forcePerso(), PDO::PARAM_INT);
         $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
         $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
-        $q->bindValue(':experience', $perso->experience(),PDO::PARAM_INT);
+        $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
+        $q->bindValue(':id', $perso->id(), PDO::PARAM_INT); // Ajoutez cette ligne pour spécifier l'ID
+
         $q->execute();
-
-
-
     }
+
    
 
    

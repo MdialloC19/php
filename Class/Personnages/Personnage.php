@@ -105,8 +105,8 @@ Class Personnage{
 
     }
     public function frapper(Personnage $perso){
-        
-        if($this==$perso)
+        var_dump($perso->id() == $this->_id);
+        if($perso->id() == $this->_id)
             return self::CEST_MOI;
         return $perso->recevoirDegats();
     }
@@ -116,8 +116,7 @@ Class Personnage{
         $this->_degats+=5;
 
         if($this->_degats>100)
-            return self::PERSONNAGE_TUE;
-            
+            return self::PERSONNAGE_TUE;   
         return self::PERSONNAGE_FRAPPE;
 
     }
