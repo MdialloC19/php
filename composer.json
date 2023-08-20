@@ -5,7 +5,9 @@
 
     "autoload": {
         "psr-4": {
-            "Class\\":"Class/"
+            "Class\\":"Class/",
+            "Router\\":"Router/",
+            "Exceptions\\":"Exceptions/"
         }
     }
 }

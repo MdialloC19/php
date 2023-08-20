@@ -1,6 +1,6 @@
 <?php
 
-namespace Class;
+namespace Class\UseManagement;
 
 use Class\Traits\Mailable;
 
