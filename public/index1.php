@@ -1,12 +1,32 @@
 <?php
 
+use Class\ChildClass;
 use Class\CoffeeMachine;
 use Class\PremiumCoffeeMachine;
 use Class\Enums\OfficeStatus;
+use Class\ExpressoMachine;
+use Class\IrishMachine;
+use Class\MultiCoffee;
 use Class\OfficeReservation;
+use Class\ParentClass;
 
 require_once(__DIR__.'/../vendor/autoload.php');
- $coffe=new CoffeeMachine(4);
- $premiumcoffe=new PremiumCoffeeMachine(2);
+// $parent =new ParentClass();
+// $child=new ChildClass();
 
- $premiumcoffe->select("vanilla");
+// var_dump($parent->getName(),$child->getName());
+$expresso=new ExpressoMachine();
+$irish=new IrishMachine();
+$multi=new MultiCoffee();
+
+var_dump(
+    $expresso->makeExpressoCoffee(),
+    $irish->makeIrishCoffee(),
+    $expresso->makeCoffee(),
+    $irish->makeCoffee(),
+
+    $multi->makeIrishCoffee(),
+    $multi->makeCoffee(),
+);
+
+// var_dump(ChildClass::getName(),ParentClass::getName());
