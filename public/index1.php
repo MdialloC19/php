@@ -1,24 +1,15 @@
 <?php
 
-// require_once('./Class/Paypal/Payment.php');
-// require_once('./Class/Stripe/Payment.php');
-// require_once('./Class/Users/User.php');
+use Class\Enums\OfficeStatus;
+use Class\OfficeReservation;
 
-// spl_autoload_register(function($class){
-//     $path = dirname(__DIR__) . '/' . str_replace('\\', '/', $class) . '.php';
-//     if(file_exists($path)){
-//         require_once($path);
-//     }
-// });
+require_once(__DIR__.'/../vendor/autoload.php');
 
-require "../vendor/autoload.php";
-use \Class\Paypal\Payment as PaypalPayment;
-use \Class\Stripe\Payment as StripePayment;
-use \Colors\RandomColor;
+// $status="en attente";
 
-var_dump(RandomColor::one()); 
-
-
-$_paymentPaypal=new PaypalPayment();
-$_paymentStripe=new StripePayment();
-var_dump($_paymentStripe, $_paymentPaypal);
+// if($status===Reservation::APPROVAL_PENDING){
+//     echo "En atente !!!";
+// }
+$reservation =new OfficeReservation();
+if(OfficeStatus::APPROVAL_PENDING===$reservation->status)
+    echo 'En attente';
