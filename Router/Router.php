@@ -6,18 +6,31 @@ use Class\Exceptions\RouteNotFoundException;
 
 class Router
 {
-    private array $routes;
+    private array $routes=[];
 
-    public function register(string $path, callable|array $action): void 
+    public function register(string $path, callable|array $action, string $HTTPVerb ): void 
     {
-        $this->routes[$path]=$action;
+        $this->routes[$HTTPVerb][$path]=$action;
     }
 
-    public function resolve($url):mixed
+    public function get(string $path, callable|array $action)
+    {
+        $this->register($path,$action,'GET');
+    }
+    public function post(string $path, callable|array $action)
+    {
+        $this->register($path,$action,'POST');
+    }
+
+    public function getRoutes():array
+    {
+        return $this->routes;
+    }
+    public function resolve($url, string $requestMethod):mixed
     {
         // var_dump($url);
         $path=explode('?',$url)[0];
-        $action=$this->routes[$path]??null;
+        $action=$this->routes[$requestMethod][$path]??null;
         // var_dump($action);
 
         if(is_callable($action)){
