@@ -12,9 +12,12 @@ define('BASE_VIEW_PATH','Views'.DIRECTORY_SEPARATOR);
 $router=new Router();
 
 
-$router->register('/',['Controllers\HomeController','index']);
+$router->get('/',['Controllers\HomeController','index']);
+$router->post('/contact',['Controllers\Contact','store']);
  
-(new App($router, $_SERVER['REQUEST_URI']))->run();
+(new App($router, [
+    'uri'=> $_SERVER['REQUEST_URI'],
+    'method'=>$_SERVER['REQUEST_METHOD']]))->run();
 
 // $router->register('/contact', function(){
 //     return 'Contact Page';
