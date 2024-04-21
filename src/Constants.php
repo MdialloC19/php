@@ -3,8 +3,8 @@ namespace Source;
 
 class Constants
 {
-    public const DB_NAME="laraveljutsu";
-    public const DB_HOST="121.0.0.1";
-    public const DB_USERNAME="modou";
-    public const DB_PASSWORD="Passer2023";
+    public const DB_NAME = "modou";
+    public const DB_HOST = "127.0.0.1"; // Notez la correction de l'adresse IP
+    public const DB_USERNAME = "moussa";
+    public const DB_PASSWORD = "P@sser2024";
 }
